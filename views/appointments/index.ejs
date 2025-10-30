@@ -1,0 +1,75 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary mb-0">📅 Appointment Schedule</h2>
+    <a href="/appointments/new" class="btn btn-success shadow-sm px-4 fw-semibold">
+      ➕ Book New Appointment
+    </a>
+  </div>
+
+  <% if (appointments && appointments.length > 0) { %>
+    <div class="table-responsive shadow-sm rounded">
+      <table class="table align-middle table-hover text-center">
+        <thead class="table-primary">
+          <tr>
+            <th>Patient</th>
+            <th>Doctor</th>
+            <th>Specialization</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% appointments.forEach(app => { %>
+            <tr class="table-row-hover">
+              <td class="fw-semibold"><i class="bi bi-person-fill text-primary"></i> <%= app.patient.name %></td>
+              <td>Dr. <%= app.doctor.name %></td>
+              <td><%= app.doctor.specialization %></td>
+              <td><%= app.date.toLocaleDateString() %></td>
+              <td><%= app.timeSlot %></td>
+              <td>
+                <span class="badge rounded-pill bg-<%= app.status === 'Scheduled' ? 'info' 
+                  : app.status === 'Completed' ? 'success' 
+                  : app.status === 'Cancelled' ? 'danger' 
+                  : 'secondary' %> px-3 py-2 shadow-sm">
+                  <%= app.status %>
+                </span>
+              </td>
+              <td>
+                <a href="/appointments/<%= app._id %>" 
+                   class="btn btn-sm btn-outline-primary fw-semibold">
+                   🔍 View
+                </a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <div class="alert alert-info shadow-sm mt-4 text-center">
+      No appointments scheduled yet.
+    </div>
+  <% } %>
+</div>
+
+<style>
+  .table-row-hover:hover {
+    background-color: rgba(0, 150, 199, 0.08);
+    transition: 0.3s ease;
+  }
+  .btn-outline-primary:hover {
+    background-color: #0077b6;
+    color: white !important;
+  }
+  .table {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+</style>
+
+<%- include('../partials/footer') %>

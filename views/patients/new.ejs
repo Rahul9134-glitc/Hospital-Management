@@ -1,0 +1,71 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5">
+  <div class="col-lg-8 col-md-10 mx-auto">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+      <div class="card-header text-white py-3" style="background: linear-gradient(90deg, #0077b6, #00b4d8);">
+        <h2 class="fw-bold mb-0">➕ Add New Patient</h2>
+      </div>
+
+      <div class="card-body p-4">
+        <form action="/patients" method="POST">
+          <div class="mb-3">
+            <label for="name" class="form-label fw-semibold">Full Name</label>
+            <input type="text" class="form-control form-control-lg" id="name" name="name" placeholder="Enter patient's name" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label fw-semibold">Email</label>
+            <input type="email" class="form-control form-control-lg" id="email" name="email" placeholder="example@email.com" required>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="age" class="form-label fw-semibold">Age</label>
+              <input type="number" class="form-control form-control-lg" id="age" name="age" min="1" required>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="gender" class="form-label fw-semibold">Gender</label>
+              <select class="form-select form-select-lg" id="gender" name="gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="contact" class="form-label fw-semibold">Contact</label>
+              <input type="text" class="form-control form-control-lg" id="contact" name="contact" placeholder="10-digit number" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="address" class="form-label fw-semibold">Address</label>
+            <textarea class="form-control form-control-lg" id="address" name="address" rows="3" placeholder="Enter full address"></textarea>
+          </div>
+
+          <div class="d-flex justify-content-end gap-3 mt-4">
+            <a href="/patients" class="btn btn-outline-secondary px-4 py-2">Cancel</a>
+            <button type="submit" class="btn btn-success px-4 py-2">💾 Save Patient</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  .form-control:focus, .form-select:focus {
+    border-color: #00b4d8;
+    box-shadow: 0 0 0 0.25rem rgba(0, 180, 216, 0.25);
+  }
+</style>
+
+<%- include('../partials/footer') %>

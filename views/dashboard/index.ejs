@@ -1,0 +1,223 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid px-3 px-md-5 py-4">
+    <h1 class="mb-4 text-center text-md-start fw-bold">🏥 Hospital Management Dashboard</h1>
+
+    <div class="row g-4">
+        
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <a href="/patients" class="text-decoration-none">
+                <div class="card bg-primary text-white shadow h-100 card-hover">
+                    <div class="card-body text-center text-md-start">
+                        <h5 class="card-title fw-semibold"><i class="bi bi-person-wheelchair me-2"></i>Total Patients</h5>
+                        <h2 class="card-text fw-bold"><%= stats.totalPatients %></h2>
+                        <p class="card-text small text-light opacity-75">Registered in System</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <a href="/doctors" class="text-decoration-none">
+                <div class="card bg-info text-white shadow h-100 card-hover">
+                    <div class="card-body text-center text-md-start">
+                        <h5 class="card-title fw-semibold"><i class="bi bi-heart-pulse me-2"></i>Total Doctors</h5>
+                        <h2 class="card-text fw-bold"><%= stats.doctorCount %></h2>
+                        <p class="card-text small text-light opacity-75">On Staff</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <a href="/users" class="text-decoration-none">
+                <div class="card bg-secondary text-white shadow h-100 card-hover">
+                    <div class="card-body text-center text-md-start">
+                        <h5 class="card-title fw-semibold"><i class="bi bi-people-fill me-2"></i>Staff Accounts</h5>
+                        <h2 class="card-text fw-bold"><%= stats.userCount %></h2>
+                        <p class="card-text small text-light opacity-75">Users/Admins</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <a href="/appointments" class="text-decoration-none">
+                <div class="card bg-dark text-white shadow h-100 card-hover">
+                    <div class="card-body text-center text-md-start">
+                        <h5 class="card-title fw-semibold"><i class="bi bi-calendar3 me-2"></i>Total Appointments</h5>
+                        <h2 class="card-text fw-bold"><%= stats.totalAppointments %></h2>
+                        <p class="card-text small opacity-75">Upcoming & Historical</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <a href="/appointments" class="text-decoration-none">
+                <div class="card bg-warning text-dark shadow h-100 card-hover">
+                    <div class="card-body text-center text-md-start">
+                        <h5 class="card-title fw-semibold"><i class="bi bi-clock-fill me-2"></i>Appointments Today</h5>
+                        <h2 class="card-text fw-bold"><%= stats.todayAppointments %></h2>
+                        <p class="card-text small text-dark opacity-75">Scheduled Today</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <a href="/billing" class="text-decoration-none">
+                <div class="card bg-success text-white shadow h-100 card-hover">
+                    <div class="card-body text-center text-md-start">
+                        <h5 class="card-title fw-semibold"><i class="bi bi-cash-stack me-2"></i>Revenue (This Month)</h5>
+                        <h2 class="card-text fw-bold">₹<%= stats.monthlyPaidRevenue.toFixed(2) %></h2>
+                        <p class="card-text small text-light opacity-75">Paid Invoices (Since 1st)</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <a href="/billing" class="text-decoration-none">
+                <div class="card border-primary text-primary shadow-sm h-100 card-hover-light">
+                    <div class="card-body text-center text-md-start">
+                        <h5 class="card-title fw-semibold">Total Invoices</h5>
+                        <h2 class="card-text fw-bold"><%= stats.totalInvoices %></h2>
+                        <p class="card-text small text-muted">Total Bills Generated</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <a href="/billing" class="text-decoration-none">
+                <div class="card border-danger shadow-sm h-100 card-hover-light">
+                    <div class="card-body text-center text-md-start">
+                        <h5 class="card-title fw-semibold text-danger">Pending Revenue</h5>
+                        <h2 class="card-text fw-bold text-danger">₹<%= stats.totalPendingRevenue.toFixed(2) %></h2>
+                        <p class="card-text small text-muted">Total Outstanding Balance</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0 fw-semibold text-muted"><i class="bi bi-graph-up me-2"></i>Monthly Revenue Last 6 Months</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="monthlyRevenueChart" style="max-height: 450px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Smooth hover animation */
+    .card-hover {
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card-hover:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .card-hover-light {
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card-hover-light:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 576px) {
+        h1 {
+            font-size: 1.6rem;
+        }
+        .card h2 {
+            font-size: 1.8rem;
+        }
+        .card-body {
+            padding: 1rem !important;
+        }
+    }
+</style>
+
+<script>
+    // 1. Check if Chart.js library is loaded (It should be in partials/header.ejs)
+    if (typeof Chart === 'undefined') {
+        console.error("Chart.js library is not loaded. Check partials/header.ejs CDN link.");
+    } else {
+        // 2. Data from Backend (EJS variables are available here)
+        // Ensure data is parsed correctly from EJS to JavaScript Array
+        const monthlyLabels = JSON.parse('<%- JSON.stringify(chartData.labels) %>');
+        const monthlyRevenue = JSON.parse('<%- JSON.stringify(chartData.revenue) %>');
+
+        const ctx = document.getElementById('monthlyRevenueChart').getContext('2d');
+        
+        // 3. Initialize the Chart
+        new Chart(ctx, {
+            type: 'bar', // Bar Chart
+            data: {
+                labels: monthlyLabels,
+                datasets: [{
+                    label: 'Paid Revenue (₹)',
+                    data: monthlyRevenue,
+                    backgroundColor: 'rgba(40, 167, 69, 0.8)', // Success Green
+                    borderColor: 'rgba(40, 167, 69, 1)',
+                    borderWidth: 1,
+                    borderRadius: 5 // Optional: Rounded bars
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Allows setting max-height
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Revenue in Rupees (₹)',
+                            font: { weight: 'bold' }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Month',
+                            font: { weight: 'bold' }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    // Format as INR currency
+                                    label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+<%- include('../partials/footer') %>

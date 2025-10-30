@@ -1,0 +1,74 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5">
+  <div class="col-md-8 mx-auto">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+      <div class="card-header bg-gradient text-white py-4" style="background: linear-gradient(90deg, #0077b6, #00b4d8);">
+        <h2 class="fw-bold mb-0">
+          👤 <%= patient.name %> — Details
+        </h2>
+      </div>
+
+      <div class="card-body p-4">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <p class="mb-2"><strong>Email:</strong> <br><span class="text-muted"><%= patient.email %></span></p>
+          </div>
+          <div class="col-md-3">
+            <p class="mb-2"><strong>Age:</strong> <br><span class="text-muted"><%= patient.age %></span></p>
+          </div>
+          <div class="col-md-3">
+            <p class="mb-2"><strong>Gender:</strong> <br><span class="text-muted"><%= patient.gender %></span></p>
+          </div>
+
+          <div class="col-md-6">
+            <p class="mb-2"><strong>Contact:</strong> <br><span class="text-muted"><%= patient.contact %></span></p>
+          </div>
+          <div class="col-md-6">
+            <p class="mb-2"><strong>Address:</strong> <br><span class="text-muted"><%= patient.address || 'N/A' %></span></p>
+          </div>
+
+          <div class="col-md-6">
+            <p class="mb-2"><strong>Admitted On:</strong> <br><span class="text-muted"><%= patient.dateAdmitted ? patient.dateAdmitted.toLocaleDateString() : 'N/A' %></span></p>
+          </div>
+          <div class="col-md-6">
+            <p class="mb-2"><strong>Record Created:</strong> <br><span class="text-muted"><%= patient.createdAt.toLocaleDateString() %></span></p>
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="d-flex justify-content-between flex-wrap gap-2">
+          <a href="/patients" class="btn btn-outline-secondary px-4">
+            ← Back to List
+          </a>
+
+          <div>
+            <a href="/patients/<%= patient._id %>/edit" class="btn btn-warning px-4 me-2">
+              ✏️ Edit
+            </a>
+
+            <form action="/patients/<%= patient._id %>?_method=DELETE" method="POST" class="d-inline">
+              <button type="submit" class="btn btn-danger px-4"
+                onclick="return confirm('Are you sure you want to delete this patient record?');">
+                🗑️ Delete
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+<%- include('../partials/footer') %>

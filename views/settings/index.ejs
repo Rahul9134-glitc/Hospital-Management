@@ -1,0 +1,110 @@
+<%- include('../partials/header') %>
+
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark"><i class="bi bi-gear-fill me-2"></i> System Settings</h2>
+        </div>
+
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-header bg-primary text-white py-3">
+                <h5 class="card-title mb-0">Hospital & Contact Information</h5>
+            </div>
+            
+            <div class="card-body p-4">
+                
+                <% if (messages.success && messages.success.length > 0) { %>
+                    <div class="alert alert-success"><%= messages.success[0] %></div>
+                <% } %>
+                <% if (messages.error && messages.error.length > 0) { %>
+                    <div class="alert alert-danger"><%= messages.error[0] %></div>
+                <% } %>
+                
+                <form action="/settings" method="POST" class="row g-4">
+                    
+                    <div class="col-md-6">
+                        <label for="hospitalName" class="form-label fw-semibold">Hospital Name</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="hospitalName" 
+                            name="hospitalName" 
+                            value="<%= settings.hospitalName %>" 
+                            required
+                        >
+                        <div class="form-text">Used on Bills, Emails, and System Title.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="tagline" class="form-label fw-semibold">Tagline/Motto</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="tagline" 
+                            name="tagline" 
+                            value="<%= settings.tagline %>"
+                        >
+                        <div class="form-text">Short professional motto.</div>
+                    </div>
+
+                    <div class="col-12"><hr></div>
+                    
+                    <div class="col-md-4">
+                        <label for="phone" class="form-label fw-semibold">Contact Phone</label>
+                        <input 
+                            type="tel" 
+                            class="form-control" 
+                            id="phone" 
+                            name="phone" 
+                            value="<%= settings.phone %>"
+                            required
+                        >
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="email" class="form-label fw-semibold">Contact Email</label>
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            id="email" 
+                            name="email" 
+                            value="<%= settings.email %>"
+                            required
+                        >
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="defaultCurrency" class="form-label fw-semibold">Default Currency Code</label>
+                        <select class="form-select" id="defaultCurrency" name="defaultCurrency" required>
+                            <option value="INR" <%= settings.defaultCurrency === 'INR' ? 'selected' : '' %>>INR (₹ Indian Rupee)</option>
+                            <option value="USD" <%= settings.defaultCurrency === 'USD' ? 'selected' : '' %>>USD ($ US Dollar)</option>
+                            <option value="EUR" <%= settings.defaultCurrency === 'EUR' ? 'selected' : '' %>>EUR (€ Euro)</option>
+                        </select>
+                        <div class="form-text">Used for all billing and finance reports.</div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="address" class="form-label fw-semibold">Full Address</label>
+                        <textarea 
+                            class="form-control" 
+                            id="address" 
+                            name="address" 
+                            rows="3" 
+                            required
+                        ><%= settings.address %></textarea>
+                        <div class="form-text">This address appears on invoices.</div>
+                    </div>
+
+                    <div class="col-12 mt-4 text-center text-md-start">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-save me-2"></i> Save System Settings
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

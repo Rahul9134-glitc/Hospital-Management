@@ -1,0 +1,66 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5">
+  <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+    <div class="card-header text-white py-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(90deg, #0077b6, #00b4d8);">
+      <h2 class="fw-bold mb-0">👨‍⚕️ Doctor & Staff Directory</h2>
+      <a href="/doctors/new" class="btn btn-light fw-semibold shadow-sm px-4">+ Add New Doctor</a>
+    </div>
+
+    <div class="card-body p-4">
+      <% if (doctors && doctors.length > 0) { %>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-primary text-center">
+              <tr>
+                <th>Name</th>
+                <th>Specialization</th>
+                <th>Department</th>
+                <th>Email</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody class="text-center">
+              <% doctors.forEach(doctor => { %>
+                <tr class="table-row-hover">
+                  <td class="fw-semibold"><%= doctor.name %></td>
+                  <td><%= doctor.specialization || '-' %></td>
+                  <td><%= doctor.department || '-' %></td>
+                  <td><%= doctor.email %></td>
+                  <td>
+                    <a href="/doctors/<%= doctor._id %>" class="btn btn-sm btn-info text-white me-2">View</a>
+                    <a href="/doctors/<%= doctor._id %>/edit" class="btn btn-sm btn-warning text-dark">Edit</a>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } else { %>
+        <div class="alert alert-info text-center py-4 mt-3">
+          No doctor or staff records found in the database.
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<style>
+  .table-row-hover:hover {
+    background-color: #f0f9ff !important;
+    transform: scale(1.01);
+    transition: all 0.2s ease-in-out;
+  }
+  .btn-info {
+    background-color: #0096c7;
+    border: none;
+  }
+  .btn-info:hover {
+    background-color: #0077b6;
+  }
+  .btn-warning:hover {
+    background-color: #ffca2c;
+  }
+</style>
+
+<%- include('../partials/footer') %>

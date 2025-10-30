@@ -1,0 +1,104 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5">
+  <div class="card shadow-lg border-0 rounded-4 mx-auto doctor-card">
+    <!-- Header -->
+    <div class="card-header text-white text-center py-4" style="background: linear-gradient(90deg, #0096c7, #00b4d8);">
+      <h3 class="fw-bold mb-0">
+        👨‍⚕️ <%= doctor.name %>
+      </h3>
+      <p class="mb-0 text-light"><%= doctor.specialization || 'Medical Professional' %></p>
+    </div>
+
+    <!-- Body -->
+    <div class="card-body p-4 p-md-5">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <p class="mb-2"><strong>🏥 Department:</strong></p>
+          <p class="text-secondary"><%= doctor.department || 'N/A' %></p>
+        </div>
+
+        <div class="col-md-6">
+          <p class="mb-2"><strong>💼 Specialization:</strong></p>
+          <p class="text-secondary"><%= doctor.specialization || 'N/A' %></p>
+        </div>
+
+        <div class="col-md-6">
+          <p class="mb-2"><strong>📧 Email:</strong></p>
+          <p class="text-secondary"><%= doctor.email %></p>
+        </div>
+
+        <div class="col-md-6">
+          <p class="mb-2"><strong>📞 Contact:</strong></p>
+          <p class="text-secondary"><%= doctor.contact || 'Not Provided' %></p>
+        </div>
+
+        <div class="col-md-6">
+          <p class="mb-2"><strong>💰 Salary:</strong></p>
+          <p class="text-secondary"><%= doctor.salary ? `₹${doctor.salary.toLocaleString()}` : 'Not Specified' %></p>
+        </div>
+
+        <div class="col-md-6">
+          <p class="mb-2"><strong>🕒 Joined On:</strong></p>
+          <p class="text-secondary"><%= doctor.createdAt.toLocaleDateString() %></p>
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      <!-- Buttons -->
+      <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3">
+        <a href="/doctors" class="btn btn-outline-secondary px-4 w-100 w-md-auto">
+          ← Back to Directory
+        </a>
+        <a href="/doctors/<%= doctor._id %>/edit" class="btn btn-warning text-dark px-4 w-100 w-md-auto">
+          ✏️ Edit Details
+        </a>
+        <form action="/doctors/<%= doctor._id %>?_method=DELETE" method="POST" class="w-100 w-md-auto">
+          <button type="submit" class="btn btn-danger px-4 w-100" onclick="return confirm('Are you sure you want to permanently delete this doctor record?');">
+            🗑️ Delete Record
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .doctor-card {
+    max-width: 720px;
+    transition: all 0.3s ease;
+  }
+
+  .doctor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(0, 150, 200, 0.25);
+  }
+
+  .btn-warning:hover {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+  }
+
+  .btn-outline-secondary:hover {
+    background-color: #6c757d !important;
+    color: #fff !important;
+  }
+
+  @media (max-width: 768px) {
+    .card-header h3 {
+      font-size: 1.4rem;
+    }
+
+    .card-body p {
+      font-size: 0.95rem;
+    }
+
+    .doctor-card {
+      border-radius: 1rem;
+      padding: 0.5rem;
+    }
+  }
+</style>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,178 @@
+<%- include('../partials/header') %>
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-<%= editing ? 'warning' : 'success' %> text-white py-3">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-tag-fill me-2"></i> <%= editing ? 'Edit Service' : 'Add New Service' %>
+                </h5>
+            </div>
+            
+            <div class="card-body">
+                
+                <% if (messages.success && messages.success.length > 0) { %>
+                    <div class="alert alert-success"><%= messages.success[0] %></div>
+                <% } %>
+                <% if (messages.error && messages.error.length > 0) { %>
+                    <div class="alert alert-danger"><%= messages.error[0] %></div>
+                <% } %>
+                
+                <form action="/services<%= editing ? '/edit' : '' %>" method="POST" class="g-3">
+                    
+                    <% if (editing) { %>
+                        <input type="hidden" name="serviceId" value="<%= service._id %>">
+                    <% } %>
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-semibold">Service Name</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="name" 
+                            name="name" 
+                            value="<%= editing ? service.name : '' %>" 
+                            required
+                        >
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="code" class="form-label fw-semibold">Service Code</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="code" 
+                            name="code" 
+                            value="<%= editing ? service.code : '' %>" 
+                            required
+                        >
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="price" class="form-label fw-semibold">Price (<%= settings.defaultCurrency %>)</label>
+                        <input 
+                            type="number" 
+                            step="0.01" 
+                            class="form-control" 
+                            id="price" 
+                            name="price" 
+                            value="<%= editing ? service.price.toFixed(2) : '' %>" 
+                            required
+                        >
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="category" class="form-label fw-semibold">Category</label>
+                        <select class="form-select" id="category" name="category" required>
+                            <% 
+                                const categories = ['Consultation', 'Diagnostic Test', 'Procedure', 'Room Charge', 'Other'];
+                                const currentCategory = editing ? service.category : 'Other'; 
+                            %>
+                            <% categories.forEach(cat => { %>
+                                <option value="<%= cat %>" <%= currentCategory === cat ? 'selected' : '' %>>
+                                    <%= cat %>
+                                </option>
+                            <% }); %>
+                        </select>
+                    </div>
+
+                    <% if (editing) { %>
+                        <div class="form-check mb-3">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                value="on" 
+                                id="isActive" 
+                                name="isActive" 
+                                <%= service.isActive ? 'checked' : '' %>
+                            >
+                            <label class="form-check-label" for="isActive">
+                                Service is Active (Available for Billing)
+                            </label>
+                        </div>
+                    <% } %>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label fw-semibold">Description</label>
+                        <textarea 
+                            class="form-control" 
+                            id="description" 
+                            name="description" 
+                            rows="2"
+                        ><%= editing ? service.description : '' %></textarea>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-<%= editing ? 'warning' : 'success' %>">
+                            <i class="bi bi-save me-2"></i> <%= editing ? 'Update Service' : 'Add Service' %>
+                        </button>
+                        <% if (editing) { %>
+                            <a href="/services" class="btn btn-outline-secondary">
+                                Cancel Edit
+                            </a>
+                        <% } %>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white py-3">
+                <h5 class="card-title mb-0"><i class="bi bi-table me-2"></i> All Available Services</h5>
+            </div>
+            <div class="card-body p-0">
+                <% if (services.length > 0) { %>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Service Name</th>
+                                    <th>Code</th>
+                                    <th>Category</th>
+                                    <th>Price (<%= settings.defaultCurrency %>)</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% services.forEach(svc => { %>
+                                    <tr>
+                                        <td><%= svc.name %></td>
+                                        <td><%= svc.code %></td>
+                                        <td><%= svc.category %></td>
+                                        <td class="fw-bold"><%= svc.price.toFixed(2) %></td>
+                                        <td>
+                                            <span class="badge bg-<%= svc.isActive ? 'success' : 'danger' %>">
+                                                <%= svc.isActive ? 'Active' : 'Inactive' %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="/services/edit/<%= svc._id %>" class="btn btn-sm btn-outline-primary me-2">
+                                                <i class="bi bi-pencil-square"></i> Edit
+                                            </a>
+                                            
+                                            <form action="/services/<%= svc._id %>/delete" method="POST" 
+                                                  class="d-inline" 
+                                                  onsubmit="return confirm('क्या आप वाकई इस सेवा ( <%= svc.name %> ) को हटाना चाहते हैं? यह कार्रवाई अपरिवर्तनीय है।');">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <div class="alert alert-info mb-0 text-center">No services have been added yet.</div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

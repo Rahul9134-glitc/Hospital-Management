@@ -1,0 +1,97 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5">
+
+  <!-- Header Section -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold text-primary">
+      💰 Billing & Invoices
+    </h1>
+    <a href="/billing/new" class="btn btn-success shadow-sm px-4 py-2 rounded-pill fw-semibold">
+      + Create New Invoice
+    </a>
+  </div>
+
+  <% if (invoices && invoices.length > 0) { %>
+    <div class="card shadow border-0 rounded-4">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-primary text-dark">
+              <tr>
+                <th scope="col">Invoice ID</th>
+                <th scope="col">Patient Name</th>
+                <th scope="col">Date</th>
+                <th scope="col">Total Amount</th>
+                <th scope="col">Status</th>
+                <th scope="col" class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% invoices.forEach(invoice => { %>
+                <tr class="table-row">
+                  <td class="fw-semibold text-secondary">#<%= invoice._id.toString().substring(18).toUpperCase() %></td>
+                  <td><%= invoice.patient.name %></td>
+                  <td><%= invoice.createdAt.toLocaleDateString() %></td>
+                  <td><strong class="text-success">₹<%= invoice.grandTotal.toFixed(2) %></strong></td>
+                  <td>
+                    <span class="badge rounded-pill px-3 py-2 fs-6 bg-<%= 
+                      invoice.status === 'Paid' 
+                        ? 'success' 
+                        : invoice.status === 'Pending' 
+                        ? 'warning text-dark' 
+                        : 'danger' 
+                    %> shadow-sm">
+                      <%= invoice.status %>
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    <a href="/billing/<%= invoice._id %>" class="btn btn-sm btn-info text-white px-3 shadow-sm">
+                      View
+                    </a>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="alert alert-info shadow-sm text-center py-3 rounded-3 mt-4">
+      No invoices found in the system.
+    </div>
+  <% } %>
+</div>
+
+<style>
+  h1 {
+    letter-spacing: 0.5px;
+  }
+
+  .table thead {
+    background: linear-gradient(90deg, #007bff, #00b4d8);
+    color: #fff !important;
+  }
+
+  .table-row:hover {
+    background-color: #f1f9ff !important;
+    transform: scale(1.01);
+    transition: 0.2s ease-in-out;
+  }
+
+  .badge {
+    font-weight: 500;
+  }
+
+  .btn-info {
+    background: #00b4d8;
+    border: none;
+  }
+
+  .btn-info:hover {
+    background: #0096c7;
+  }
+</style>
+
+<%- include('../partials/footer') %>

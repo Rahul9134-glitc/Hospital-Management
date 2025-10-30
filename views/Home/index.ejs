@@ -1,0 +1,90 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5">
+  <!-- Dashboard Header -->
+  <div class="text-center mb-5">
+    <h1 class="fw-bold text-primary">🏥 Welcome to Hospital Management System (HMS)</h1>
+    <p class="text-secondary fs-5">
+      Efficient care, smart management — your all-in-one hospital dashboard.
+    </p>
+    <hr class="w-25 mx-auto border-3 border-primary">
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="row dashboard-summary">
+    <div class="col-md-4 mb-4">
+      <section class="card h-100 p-4 border-0 shadow-sm hover-card">
+        <div class="text-center">
+          <h2 class="fw-bold text-primary mb-3">Patients</h2>
+          <p class="text-muted">Total Patients: <strong><%= totalPatients %></strong></p>
+          <a href="/patients" class="btn btn-outline-primary mt-3 px-4">Manage Patients</a>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-md-4 mb-4">
+      <section class="card h-100 p-4 border-0 shadow-sm hover-card">
+        <div class="text-center">
+          <h2 class="fw-bold text-success mb-3">Doctors</h2>
+          <p class="text-muted">Total Doctors: <strong><%= totalDoctors %></strong></p>
+          <a href="/doctors" class="btn btn-outline-success mt-3 px-4">Manage Doctors</a>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-md-4 mb-4">
+      <section class="card h-100 p-4 border-0 shadow-sm hover-card">
+        <div class="text-center">
+          <h2 class="fw-bold text-warning mb-3">Appointments</h2>
+          <p class="text-muted">Today's Appointments: <strong><%= todaysAppointments %></strong></p>
+          <a href="/appointments" class="btn btn-outline-warning mt-3 px-4">View Schedule</a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Recent Appointments -->
+  <div class="mt-5">
+    <h3 class="fw-bold text-center text-primary mb-4">🗓️ Recent Appointments</h3>
+
+    <% if (recentAppointments.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover shadow-sm">
+          <thead class="table-primary">
+            <tr>
+              <th>#</th>
+              <th>Patient</th>
+              <th>Doctor</th>
+              <th>Specialization</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% recentAppointments.forEach((appt, index) => { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><%= appt.patient?.name || "N/A" %></td>
+                <td><%= appt.doctor?.name || "N/A" %></td>
+                <td><%= appt.doctor?.specialization || "-" %></td>
+                <td><%= new Date(appt.date).toLocaleDateString() %></td>
+                <td>
+                  <span class="badge bg-<%= appt.status === 'Scheduled' ? 'info' :
+                                           appt.status === 'Completed' ? 'success' :
+                                           appt.status === 'Cancelled' ? 'danger' :
+                                           'secondary' %>">
+                    <%= appt.status %>
+                  </span>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <p class="text-center text-muted">No recent appointments found.</p>
+    <% } %>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

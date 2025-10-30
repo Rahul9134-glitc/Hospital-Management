@@ -1,0 +1,91 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5">
+  <!-- Page Title -->
+  <div class="text-center mb-5">
+    <h1 class="fw-bold text-primary">🧾 Patient Directory</h1>
+    <p class="text-muted fs-5">Manage and view all registered patients in the system.</p>
+    <a href="/patients/new" class="btn btn-primary mt-3 px-4 shadow-sm">
+      + Add New Patient
+    </a>
+    <hr class="w-25 mx-auto border-3 border-primary mt-4">
+  </div>
+
+  <% if (patients.length > 0) { %>
+    <!-- ✅ Desktop Table -->
+    <div class="table-responsive d-none d-md-block shadow-sm rounded-3 overflow-hidden">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-primary">
+          <tr>
+            <th>#</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Contact</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% patients.forEach((patient, index) => { %>
+            <tr class="table-row-hover">
+              <td><%= index + 1 %></td>
+              <td class="fw-semibold"><%= patient.name %></td>
+              <td><%= patient.email %></td>
+              <td><%= patient.age %></td>
+              <td><%= patient.gender %></td>
+              <td><%= patient.contact %></td>
+              <td class="text-center">
+                <a href="/patients/<%= patient._id %>" class="btn btn-outline-primary btn-sm px-3 me-1">
+                  <i class="bi bi-eye"></i> View
+                </a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ✅ Mobile Cards -->
+    <div class="d-block d-md-none">
+      <% patients.forEach((patient, index) => { %>
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title fw-bold text-primary mb-2"><%= patient.name %></h5>
+            <p class="mb-1"><strong>Email:</strong> <%= patient.email %></p>
+            <p class="mb-1"><strong>Age:</strong> <%= patient.age %> | <strong>Gender:</strong> <%= patient.gender %></p>
+            <p class="mb-2"><strong>Contact:</strong> <%= patient.contact %></p>
+            <div class="text-end">
+              <a href="/patients/<%= patient._id %>" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-eye"></i> View
+              </a>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="alert alert-info text-center shadow-sm mt-5 py-4 rounded-3">
+      <h5 class="fw-semibold mb-1">No Patients Found 🩺</h5>
+      <p class="mb-0 text-muted">Start by adding a new patient to your directory.</p>
+    </div>
+  <% } %>
+</div>
+
+<style>
+  .table-row-hover:hover {
+    background-color: #f6fbff !important;
+    transition: 0.2s ease-in-out;
+  }
+
+  @media (max-width: 576px) {
+    .card-body p {
+      font-size: 0.9rem;
+    }
+    .card-title {
+      font-size: 1.1rem;
+    }
+  }
+</style>
+
+<%- include('../partials/footer') %>

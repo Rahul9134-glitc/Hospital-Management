@@ -1,0 +1,186 @@
+<%- include('../partials/header') %>
+
+<div class="container py-4">
+  <h1 class="fw-bold text-primary mb-4">🧾 Create New Invoice</h1>
+
+  <% if (messages.success && messages.success.length > 0) { %>
+      <div class="alert alert-success"><%= messages.success[0] %></div>
+  <% } %>
+  <% if (messages.error && messages.error.length > 0) { %>
+      <div class="alert alert-danger"><%= messages.error[0] %></div>
+  <% } %>
+
+  <form action="/billing" method="POST" id="invoiceForm" class="col-lg-10 mx-auto p-4 border bg-white rounded-4 shadow-sm">
+
+    <div class="mb-4">
+      <label for="patient" class="form-label fs-5 fw-semibold">Select Patient</label>
+      <select class="form-select shadow-sm" id="patient" name="patient" required>
+        <option value="">Choose Patient</option>
+        <% patients.forEach(p => { %>
+          <option value="<%= p._id %>"><%= p.name %> (Contact: <%= p.contact %>)</option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="fw-bold text-secondary">Billing Items (Services)</h4>
+      <button type="button" class="btn btn-outline-primary btn-sm shadow-sm" id="addItemBtn">+ Add Service</button>
+    </div>
+
+    <div id="itemsContainer">
+      <div class="row item-row mb-3 gx-2 align-items-center border-bottom pb-2">
+        <div class="col-md-5">
+          <label class="form-label small fw-semibold">Service</label>
+          <select class="form-select item-service shadow-sm" name="items[0][serviceId]" required onchange="updatePrice(this, 0)">
+              <option value="">Select Service</option>
+              <% services.forEach(svc => { %>
+                  <option 
+                      value="<%= svc._id %>" 
+                      data-price="<%= svc.price.toFixed(2) %>"
+                      data-name="<%= svc.name %>"
+                  >
+                      <%= svc.name %> (Price: <%= settings.defaultCurrency %><%= svc.price.toFixed(2) %>)
+                  </option>
+              <% }) %>
+          </select>
+          </div>
+        <div class="col-md-2">
+          <label class="form-label small fw-semibold">Qty</label>
+          <input type="number" class="form-control item-qty shadow-sm" name="items[0][quantity]" value="1" min="1" required oninput="calculateTotal()" data-index="0">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label small fw-semibold">Unit Price (<%= settings.defaultCurrency %>)</label>
+          <input type="number" class="form-control item-price shadow-sm" name="items[0][unitPrice]" value="0" min="0" required readonly data-index="0">
+        </div>
+        <div class="col-md-2 text-end">
+          <label class="form-label small fw-semibold">Total</label>
+          <p class="mb-0 fw-bold item-total text-success fs-6"><%= settings.defaultCurrency %>0.00</p>
+        </div>
+        <div class="col-md-1 text-center">
+          <button type="button" class="btn btn-sm btn-outline-danger remove-item d-none">&times;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4 pt-3 border-top">
+      <div class="col-md-7">
+        <label for="taxRate" class="form-label fw-semibold">Tax Rate (e.g., 0.05 for 5%)</label>
+        <input type="number" class="form-control shadow-sm w-50" id="taxRate" name="taxRate" value="0.05" step="0.01" min="0" oninput="calculateTotal()">
+      </div>
+      <div class="col-md-5 text-end">
+        <h5 class="fw-semibold text-muted mt-3">Sub Total: <span id="subTotalDisplay"><%= settings.defaultCurrency %>0.00</span></h5>
+        <h5 class="fw-semibold text-muted">Tax Amount: <span id="taxAmountDisplay"><%= settings.defaultCurrency %>0.00</span></h5>
+        <hr>
+        <h3 class="text-success fw-bold">Grand Total: <span id="grandTotalDisplay"><%= settings.defaultCurrency %>0.00</span></h3>
+      </div>
+    </div>
+
+    <div class="mt-5 d-flex justify-content-end gap-3">
+      <a href="/billing" class="btn btn-secondary px-4 py-2">Cancel</a>
+      <button type="submit" class="btn btn-success px-4 py-2 fw-semibold shadow-sm">Generate Invoice</button>
+    </div>
+  </form>
+</div>
+
+<script>
+let itemIndex = 1;
+const currency = '<%= settings.defaultCurrency %>';
+const serviceOptions = `<option value="">Select Service</option>
+    <% services.forEach(svc => { %>
+        <option value="<%= svc._id %>" data-price="<%= svc.price.toFixed(2) %>" data-name="<%= svc.name %>">
+            <%= svc.name %> (Price: <%= settings.defaultCurrency %><%= svc.price.toFixed(2) %>)
+        </option>
+    <% }) %>
+`;
+
+// Function to update the unit price when a service is selected
+function updatePrice(selectElement, index) {
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    const priceInput = document.querySelector(`.item-row [name="items[${index}][unitPrice]"]`);
+    // const nameInput = document.querySelector(`.item-row [name="items[${index}][serviceName]"]`);
+
+    if (selectedOption.value) {
+        priceInput.value = selectedOption.getAttribute('data-price');
+        // nameInput.value = selectedOption.getAttribute('data-name');
+    } else {
+        priceInput.value = '0';
+        // nameInput.value = '';
+    }
+    calculateTotal();
+}
+
+document.getElementById('addItemBtn').addEventListener('click', () => {
+    const container = document.getElementById('itemsContainer');
+    const newRow = document.createElement('div');
+    newRow.className = 'row item-row mb-3 gx-2 align-items-center border-bottom pb-2';
+    
+    // Use the stored options and current itemIndex
+    newRow.innerHTML = `
+      <div class="col-md-5">
+        <select class="form-select item-service shadow-sm" name="items[${itemIndex}][serviceId]" required onchange="updatePrice(this, ${itemIndex})">
+            ${serviceOptions}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <input type="number" class="form-control item-qty shadow-sm" name="items[${itemIndex}][quantity]" value="1" min="1" required oninput="calculateTotal()" data-index="${itemIndex}">
+      </div>
+      <div class="col-md-2">
+        <input type="number" class="form-control item-price shadow-sm" name="items[${itemIndex}][unitPrice]" value="0" min="0" required readonly data-index="${itemIndex}">
+      </div>
+      <div class="col-md-2 text-end">
+        <p class="mb-0 fw-bold item-total text-success fs-6">${currency}0.00</p>
+      </div>
+      <div class="col-md-1 text-center">
+        <button type="button" class="btn btn-sm btn-outline-danger remove-item">&times;</button>
+      </div>
+    `;
+    container.appendChild(newRow);
+    itemIndex++;
+    updateRemoveButtons();
+});
+
+function updateRemoveButtons() {
+    document.querySelectorAll('.remove-item').forEach(btn => {
+        btn.classList.remove('d-none');
+        btn.onclick = () => {
+            btn.closest('.item-row').remove();
+            calculateTotal();
+        };
+    });
+    // Ensure the first item's remove button is hidden
+    const firstRow = document.querySelector('#itemsContainer .item-row');
+    if (firstRow) {
+        firstRow.querySelector('.remove-item').classList.add('d-none');
+    }
+}
+
+function calculateTotal() {
+    let subtotal = 0;
+    // Iterate over all item rows to calculate totals
+    document.querySelectorAll('.item-row').forEach(row => {
+        const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+        // NOTE: We now read price from the READONLY price field, which is set by updatePrice()
+        const price = parseFloat(row.querySelector('.item-price').value) || 0; 
+        
+        const total = qty * price;
+        row.querySelector('.item-total').innerText = `${currency}${total.toFixed(2)}`;
+        subtotal += total;
+    });
+    
+    const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
+    const taxAmount = subtotal * taxRate;
+    const grandTotal = subtotal + taxAmount;
+
+    document.getElementById('subTotalDisplay').innerText = `${currency}${subtotal.toFixed(2)}`;
+    document.getElementById('taxAmountDisplay').innerText = `${currency}${taxAmount.toFixed(2)}`;
+    document.getElementById('grandTotalDisplay').innerText = `${currency}${grandTotal.toFixed(2)}`;
+}
+
+// Initial calculation and button setup when page loads
+window.onload = () => {
+    calculateTotal();
+    updateRemoveButtons();
+};
+</script>
+
+<%- include('../partials/footer') %>

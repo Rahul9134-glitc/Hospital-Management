@@ -1,0 +1,96 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5">
+  <div class="card shadow-lg border-0 rounded-4 col-lg-8 mx-auto overflow-hidden">
+    
+    <!-- Header -->
+    <div class="card-header bg-gradient text-white p-4" 
+         style="background: linear-gradient(90deg, #007bff, #00b4d8);">
+      <h3 class="mb-0 fw-bold">🩺 Appointment Details</h3>
+    </div>
+    
+    <!-- Body -->
+    <div class="card-body p-4">
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="text-primary fw-bold mb-0">
+          👤 Patient: <%= appointment.patient.name %>
+        </h4>
+        <span class="badge fs-6 px-3 py-2 bg-<%= appointment.status === 'Scheduled' ? 'primary' : appointment.status === 'Completed' ? 'success' : appointment.status === 'Cancelled' ? 'danger' : 'secondary' %>">
+          <%= appointment.status %>
+        </span>
+      </div>
+
+      <h5 class="text-muted mb-4">Doctor: 
+        <strong>Dr. <%= appointment.doctor.name %></strong> 
+        (<%= appointment.doctor.specialization %>)
+      </h5>
+      
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <p><strong>🗓 Date:</strong> <%= appointment.date.toLocaleDateString() %></p>
+          <p><strong>⏰ Time:</strong> <%= appointment.timeSlot %></p>
+          <p><strong>💬 Reason:</strong> <%= appointment.reason %></p>
+          <p><strong>📅 Created:</strong> <%= appointment.createdAt.toLocaleDateString() %></p>
+        </div>
+        <div class="col-md-6 ps-md-4 border-start">
+          <h6 class="fw-bold mb-2">📞 Contact Information</h6>
+          <p class="mb-1">👤 <strong>Patient Email:</strong> 
+            <a href="mailto:<%= appointment.patient.email %>" class="text-decoration-none text-primary">
+              <%= appointment.patient.email %>
+            </a>
+          </p>
+          <p class="mb-1"><strong>Patient Contact:</strong> <%= appointment.patient.contact %></p>
+          <p class="mb-1">🩺 <strong>Doctor Email:</strong> 
+            <a href="mailto:<%= appointment.doctor.email %>" class="text-decoration-none text-success">
+              <%= appointment.doctor.email %>
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- Status Update Form -->
+      <form action="/appointments/<%= appointment._id %>?_method=PUT" method="POST" class="d-flex flex-wrap align-items-center gap-3">
+        <label for="status" class="form-label mb-0 fw-semibold text-muted">Change Status:</label>
+        <select class="form-select w-auto rounded-pill shadow-sm" id="status" name="status" required>
+          <option value="Scheduled" <%= appointment.status === 'Scheduled' ? 'selected' : '' %>>Scheduled</option>
+          <option value="Completed" <%= appointment.status === 'Completed' ? 'selected' : '' %>>Completed</option>
+          <option value="Cancelled" <%= appointment.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+          <option value="No Show" <%= appointment.status === 'No Show' ? 'selected' : '' %>>No Show</option>
+        </select>
+        <button type="submit" class="btn btn-warning fw-semibold shadow-sm px-4">
+          🔄 Update
+        </button>
+      </form>
+
+      <div class="mt-4">
+        <a href="/appointments" class="btn btn-outline-secondary px-4 rounded-pill shadow-sm">
+          ← Back to Schedule
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    background-color: #f9fbff;
+  }
+  .form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+  }
+  a.text-primary:hover, a.text-success:hover {
+    text-decoration: underline;
+  }
+  .btn-warning:hover {
+    background-color: #f0ad4e;
+    transform: scale(1.03);
+    transition: 0.2s ease;
+  }
+</style>
+
+<%- include('../partials/footer') %>
