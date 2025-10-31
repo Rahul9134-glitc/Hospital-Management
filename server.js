@@ -16,7 +16,9 @@ import { loadSettings } from "./middleware/loadSettings.js";
 import SettingsRoutes from "./routes/settings.routes.js"
 import flash from "connect-flash"
 import ServicesRoutes from "./routes/services.routes.js"
+import MongoStore from "connect-mongo";
 import { get404 , get500 } from "./controllers/error.controllers.js";
+
 dotenv.config();
 Dbconnection();
 
@@ -30,17 +32,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
 app.use(loadSettings);
+app.set('trust proxy', 1);
 
 
 // Session Middleware
 app.use(session({
-    secret: process.env.SECRET || 'A_TEMPORARY_SECRET_PLEASE_SET_IN_DOTENV', // Fallback for safety
-    resave: false,
-    saveUninitialized: false,
-    cookie: { 
-        maxAge: 1000 * 60 * 60 * 24, // 24 hours
-        secure: process.env.NODE_ENV === 'production'
-    }
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+  }),
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+  }
 }));
 
 app.use(flash());
