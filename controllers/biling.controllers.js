@@ -1,7 +1,7 @@
-import Billing from "../Model/billing.js";
-import Patient from "../Model/patient.js";
+import Billing from "../model/billing.js";
+import Patient from "../model/patient.js";
 import PDFDocument from "pdfkit";
-import Service from "../Model/services.js";
+import Service from "../model/services.js";
 
 
 export const getAllInvoices = async (req, res, next) => {

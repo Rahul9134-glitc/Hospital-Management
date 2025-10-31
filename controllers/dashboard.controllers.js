@@ -1,9 +1,9 @@
 
-import Patient from '../Model/patient.js';
-import Appointment from '../Model/appointment.js';
-import Billing from '../Model/billing.js';
-import User from '../Model/user.js';
-import Doctor from '../Model/docter.js';
+import Patient from '../model/patient.js';
+import Appointment from '../model/appointment.js';
+import Billing from '../model/billing.js';
+import User from '../model/user.js';
+import Doctor from '../model/docter.js';
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);

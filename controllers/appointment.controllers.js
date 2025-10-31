@@ -1,7 +1,7 @@
-import Patient from "../Model/patient.js";
-import Doctor from "../Model/docter.js";
+import Patient from "../model/patient.js";
+import Doctor from "../model/docter.js";
 import sendEmail from "../utils/EmailServices.js";
-import Appointment from "../Model/appointment.js";
+import Appointment from "../model/appointment.js";
 
 export const createAppointment = async (req, res, next) => {
     try {

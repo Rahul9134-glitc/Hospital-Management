@@ -1,4 +1,4 @@
-import Settings from "../Model/settings.js";
+import Settings from "../model/settings";
 const SETTINGS_ID = 'hospitalSettings';
 
 export const getSettings = async (req, res, next) => {
