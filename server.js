@@ -1,7 +1,7 @@
 
 import express from "express";
 import dotenv from "dotenv";
-import Dbconnection from "./DB/Dbconnection.js";
+import Dbconnection from "./db/Dbconnection.js";
 import errorHandler from "./middleware/errorHandler.js";
 import PatientRoutes from "./routes/Patient.routes.js";
 import DocterRoutes from "./routes/Docter.routes.js";
