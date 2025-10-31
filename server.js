@@ -1,4 +1,3 @@
-// server.js (Updated)
 
 import express from "express";
 import dotenv from "dotenv";
