@@ -3,20 +3,20 @@
 import express from "express";
 import dotenv from "dotenv";
 import Dbconnection from "./DB/Dbconnection.js";
-import errorHandler from "./Middleware/errorHandler.js";
-import PatientRoutes from "./Routes/Patient.routes.js";
-import DocterRoutes from "./Routes/Docter.routes.js";
-import BilingRoutes from "./Routes/billing.routes.js"
+import errorHandler from "./middleware/errorHandler.js";
+import PatientRoutes from "./routes/Patient.routes.js";
+import DocterRoutes from "./routes/Docter.routes.js";
+import BilingRoutes from "./routes/billing.routes.js"
 import methodOverride from "method-override";
-import AppointmentRoutes from "./Routes/Appointment.routes.js";
-import MainRoutes from "./Routes/main.routes.js"
+import AppointmentRoutes from "./routes/Appointment.routes.js";
+import MainRoutes from "./routes/main.routes.js"
 import session from "express-session";
-import { isAuth } from "./Middleware/isAuth.js";
-import UserRoutes from "./Routes/user.routes.js";
-import { loadSettings } from "./Middleware/loadSettings.js"; 
-import SettingsRoutes from "./Routes/settings.routes.js"
+import { isAuth } from "./middleware/isAuth.js";
+import UserRoutes from "./routes/user.routes.js";
+import { loadSettings } from "./middleware/loadSettings.js"; 
+import SettingsRoutes from "./routes/settings.routes.js"
 import flash from "connect-flash"
-import ServicesRoutes from "./Routes/services.routes.js"
+import ServicesRoutes from "./routes/services.routes.js"
 import { get404 , get500 } from "./controllers/error.controllers.js";
 import User from "./Model/user.js";
 dotenv.config();
