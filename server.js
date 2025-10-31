@@ -1,4 +1,3 @@
-
 import express from "express";
 import dotenv from "dotenv";
 import Dbconnection from "./db/Dbconnection.js";
@@ -17,6 +16,7 @@ import SettingsRoutes from "./routes/settings.routes.js"
 import flash from "connect-flash"
 import ServicesRoutes from "./routes/services.routes.js"
 import MongoStore from "connect-mongo";
+import sendEmail from "./utils/EmailServices.js";
 import { get404 , get500 } from "./controllers/error.controllers.js";
 
 dotenv.config();
@@ -85,6 +85,16 @@ app.use("/billing" ,isAuth, BilingRoutes);
 app.use("/users" , isAuth,UserRoutes);
 app.use("/settings" , SettingsRoutes);
 app.use("/services" , ServicesRoutes);
+
+app.get("/test-email", async (req, res) => {
+  await sendEmail({
+    email: "test@example.com",
+    subject: "Mailtrap Test Success 🎉",
+    message: "<h3>Mailtrap is working perfectly on Render!</h3>",
+  });
+  res.send("✅ Email sent! Check your Mailtrap inbox.");
+});
+
 
 app.use(get404);
 app.use(get500);
