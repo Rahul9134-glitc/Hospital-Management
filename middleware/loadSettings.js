@@ -1,5 +1,5 @@
 
-import Settings from "../Model/settings.js";
+import Settings from "../model/settings.js";
 
 export const loadSettings = async (req, res, next) => {
     try {
