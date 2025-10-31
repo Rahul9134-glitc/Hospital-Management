@@ -17,7 +17,8 @@ import { loadSettings } from "./Middleware/loadSettings.js";
 import SettingsRoutes from "./Routes/settings.routes.js"
 import flash from "connect-flash"
 import ServicesRoutes from "./Routes/services.routes.js"
-import { get404 , get500 } from "./Controllers/error.controllers.js";
+import { get404 , get500 } from "./controllers/error.controllers.js";
+import User from "./Model/user.js";
 dotenv.config();
 Dbconnection();
 

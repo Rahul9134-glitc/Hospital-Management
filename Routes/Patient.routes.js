@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import { getAllPatients , renderNewPatientForm , createPatient , getPatient , deletePatient , renderEditPatientForm , updatePatient} from "../Controllers/patient.controllers.js";
+import { getAllPatients , renderNewPatientForm , createPatient , getPatient , deletePatient , renderEditPatientForm , updatePatient} from "../controllers/patient.controllers.js";
 
 router.get("/new" , renderNewPatientForm);
 router.post("/" , createPatient);

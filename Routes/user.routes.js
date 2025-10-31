@@ -2,7 +2,7 @@ import express from "express"
 const router = express.Router();
 import { isAdmin } from "../Middleware/isAuth.js";
 
-import { getAllUsers , getNewUserForm , deleteUser , createUser } from "../Controllers/user.controllers.js";
+import { getAllUsers , getNewUserForm , deleteUser , createUser } from "../controllers/user.controllers.js";
 
 router.use(isAdmin);
 router.get('/', getAllUsers);

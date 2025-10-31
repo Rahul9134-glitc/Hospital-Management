@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router()
 
-import { getSettings , updateSettings } from "../Controllers/settings.controllers.js";
+import { getSettings , updateSettings } from "../controllers/settings.controllers.js";
 import { isAuth , isAdmin } from "../Middleware/isAuth.js";
 
 

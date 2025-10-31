@@ -10,7 +10,7 @@ import {
   updateDoctor,
   deleteDoctor,
   createDoctor
-} from "../Controllers/docter.controllers.js";
+} from "../controllers/docter.controllers.js";
 
 router.route('/')
     .get(getAllDoctors)

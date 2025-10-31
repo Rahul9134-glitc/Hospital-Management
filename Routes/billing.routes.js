@@ -9,7 +9,7 @@ import {
   updateInvoiceStatus,
   mockPaymentUpdate,
   generatePdfInvoice
-} from "../Controllers/biling.controllers.js";
+} from "../controllers/biling.controllers.js";
 
 
 router.get('/new', renderNewInvoiceForm);

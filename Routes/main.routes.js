@@ -1,8 +1,8 @@
 // routes/mainRoutes.js (Create this file if it doesn't exist)
 
 import express from 'express';
-import { getDashboardData } from '../Controllers/dashboard.controllers.js';
-import { getLoginForm , postLogin , postLogout } from '../Controllers/auth.controllers.js';
+import { getDashboardData } from '../controllers/dashboard.controllers.js';
+import { getLoginForm , postLogin , postLogout } from '../controllers/auth.controllers.js';
 
 const router = express.Router();
 

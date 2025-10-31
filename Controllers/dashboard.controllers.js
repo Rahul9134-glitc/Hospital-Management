@@ -1,4 +1,3 @@
-// controllers/dashboardController.js (Update)
 
 import Patient from '../Model/patient.js';
 import Appointment from '../Model/appointment.js';

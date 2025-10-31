@@ -8,7 +8,7 @@ import {
   createAppointment,
   getAppointment,
   updateAppointmentStatus,
-} from "../Controllers/appointment.controllers.js";
+} from "../controllers/appointment.controllers.js";
 
 router.get("/new", renderNewAppointmentForm);
 router.post("/", createAppointment);
