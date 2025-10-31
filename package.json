@@ -7,6 +7,10 @@
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
+
+  "engine" : {
+     "node" : "22.14.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
